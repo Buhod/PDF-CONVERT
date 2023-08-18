@@ -65,6 +65,7 @@ def convert_pdf():
 
     return render_template('index.html')
 
+
 def generate_random_string(length=8):
     letters = string.ascii_letters
     return ''.join(random.choice(letters) for _ in range(length))
