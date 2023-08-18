@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Resultados del Convertidor de PDF</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f1f1f1;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        #result {
+            margin: 20px auto;
+            max-width: 600px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        #result h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        #result p {
+            margin-bottom: 5px;
+        }
+
+        #result ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #result li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Resultados del Convertidor de PDF</h1>
+    <div id="result">
+        <h2>Resultados:</h2>
+        <p>Archivo convertido: <a href="{{ pdf_path }}" download>{{ pdf_filename }}</a></p>
+        <p>Hoja(s) separada(s):</p>
+        <ul>
+            {% for file_path in separated_files %}
+                <li><a href="{{ url_for('download', filename=os.path.basename(file_path)) }}" download>{{ os.path.basename(file_path) }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

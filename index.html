@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Convertidor de PDF</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f1f1f1;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        form {
+            margin: 20px auto;
+            text-align: center;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .file-input-label {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .file-input-label:hover {
+            background-color: #0056b3;
+        }
+
+        .file-input-label:active {
+            background-color: #003080;
+        }
+
+        #result {
+            margin: 20px auto;
+            max-width: 600px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        #result h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        #result p {
+            margin-bottom: 5px;
+        }
+
+        #result ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #result li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Convertidor de PDF</h1>
+    <form method="POST" enctype="multipart/form-data">
+        <label for="pdfFile" class="file-input-label">Seleccionar archivo PDF</label>
+        <input type="file" id="pdfFile" name="pdfFile" accept=".pdf" required>
+        <br>
+        <label for="convertFormat">Convertir a formato:</label>
+        <select id="convertFormat" name="convertFormat">
+            <option value="pdf">PDF</option>
+        </select>
+        <br>
+        <button type="submit">Convertir</button>
+    </form>
+
+    <div id="result">
+        <!-- Mostrar resultados aquí ... -->
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form');
+            const resultDiv = document.getElementById('result');
+            
+            form.addEventListener('submit', async function(event) {
+                event.preventDefault();
+                
+                const formData = new FormData(form);
+                const response = await fetch('/', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const resultHtml = await response.text();
+                resultDiv.innerHTML = resultHtml;
+            });
+        });
+    </script>
+</body>
+</html>
