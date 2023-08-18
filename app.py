@@ -21,7 +21,9 @@ def convert_pdf():
             pdf_file = request.files['pdfFile']
             pdf_filename = pdf_file.filename
 
-            temp_dir = tempfile.mkdtemp()
+            temp_dir = os.path.join(app.root_path, 'temp')  # Use a specific folder for temporary files
+            os.makedirs(temp_dir, exist_ok=True)  # Create the temp folder if it doesn't exist
+
             pdf_path = os.path.join(temp_dir, pdf_filename)
             pdf_file.save(pdf_path)
 
@@ -32,7 +34,8 @@ def convert_pdf():
                 output_pdf = PdfWriter()
                 output_pdf.add_page(page)
 
-                output_path = os.path.join(temp_dir, f'page_{page_number}_{generate_random_string()}.pdf')
+                output_filename = f'page_{page_number}_{generate_random_string()}.pdf'
+                output_path = os.path.join(temp_dir, output_filename)
                 with open(output_path, 'wb') as output_file:
                     output_pdf.write(output_file)
 
@@ -48,7 +51,7 @@ def convert_pdf():
                 new_file_path = os.path.join(target_dir, os.path.basename(file_path))
                 # Cerrar el archivo PDF antes de moverlo
                 output_pdf.close()
-                os.rename(file_path, new_file_path)
+                shutil.move(file_path, new_file_path)  # Use shutil.move instead of os.rename
                 moved_files.append(new_file_path)
 
             # Cerrar el archivo PDF de entrada
@@ -63,6 +66,12 @@ def convert_pdf():
     return render_template('index.html')
 
 def generate_random_string(length=8):
+    letters = string.ascii_letters
+    return ''.join(random.choice(letters) for _ in range(length))
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', debug=True)
+
     letters = string.ascii_letters
     return ''.join(random.choice(letters) for _ in range(length))
 
