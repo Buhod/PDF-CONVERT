@@ -1,3 +1,4 @@
+le quitaste el fondo azul, y le cambiaste el color a las letras, las letras deben ser blancas y el fondo azul, los botones de otro tipo de azul asi como en este codigo, la barra que pusiste de carga no se mueve, debes arreglarla, 
 <!DOCTYPE html>
 <html>
 <head>
@@ -41,16 +42,14 @@
         #result {
             margin: 20px auto;
             max-width: 600px;
-            background-color: #007bff; /* Cambiar el fondo a azul */
-            color: #fff; /* Cambiar el color del texto a blanco */
+            background-color: #fff;
             padding: 20px;
             border-radius: 5px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            text-align: center;
         }
 
         #result h2 {
-            color: #fff; /* Cambiar el color del título a blanco */
+            color: #333;
             margin-bottom: 10px;
         }
 
@@ -66,30 +65,6 @@
         #result li {
             margin-bottom: 5px;
         }
-
-        #loading {
-            display: none;
-            margin-top: 20px;
-            color: #aaa;
-        }
-
-        #successMessage {
-            display: none;
-            margin-top: 20px;
-            color: #0C356A;
-        }
-
-        #errorMessage {
-            display: none;
-            margin-top: 20px;
-            color: #ff0000;
-        }
-
-        #progressBar {
-            display: none;
-            margin-top: 20px;
-        }
-
     </style>
 </head>
 <body>
@@ -107,43 +82,25 @@
     </form>
 
     <div id="result">
-        <div id="loading">Cargando archivo...<br><progress id="progressBar" value="0" max="100"></progress></div>
-        <div id="successMessage">Archivo convertido correctamente.</div>
-        <div id="errorMessage">No se puede convertir el archivo. Asegúrate de que sea un archivo PDF.</div>
+        <!-- Mostrar resultados aquí ... -->
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.querySelector('form');
             const resultDiv = document.getElementById('result');
-            const loadingDiv = document.getElementById('loading');
-            const progressBar = document.getElementById('progressBar');
-            const successMessageDiv = document.getElementById('successMessage');
-            const errorMessageDiv = document.getElementById('errorMessage');
-
+            
             form.addEventListener('submit', async function(event) {
                 event.preventDefault();
-
-                loadingDiv.style.display = 'block'; // Mostrar ventana de carga
-                progressBar.style.display = 'block'; // Mostrar barra de carga
-
+                
                 const formData = new FormData(form);
                 const response = await fetch('/', {
                     method: 'POST',
                     body: formData
                 });
-
-                loadingDiv.style.display = 'none'; // Ocultar ventana de carga
-                progressBar.style.display = 'none'; // Ocultar barra de carga
-
+                
                 const resultHtml = await response.text();
                 resultDiv.innerHTML = resultHtml;
-
-                if (response.ok) {
-                    successMessageDiv.style.display = 'block'; // Mostrar mensaje de éxito
-                } else {
-                    errorMessageDiv.style.display = 'block'; // Mostrar mensaje de error
-                }
             });
         });
     </script>
