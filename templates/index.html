@@ -126,6 +126,14 @@
             <button type="submit">Convertir</button>
         </form>
 
+        <div id="loading" style="display: none;">
+            <p>Cargando archivo...</p>
+        </div>
+
+        <div id="successMessage" style="display: none;">
+            <p>Archivo cargado satisfactoriamente.</p>
+        </div>
+
         <div id="result">
             <!-- Mostrar resultados aquí ... -->
         </div>
@@ -135,16 +143,23 @@
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.querySelector('form');
             const resultDiv = document.getElementById('result');
-            
+            const loadingDiv = document.getElementById('loading');
+            const successMessageDiv = document.getElementById('successMessage');
+
             form.addEventListener('submit', async function(event) {
                 event.preventDefault();
-                
+
+                loadingDiv.style.display = 'block'; // Mostrar ventana de carga
+
                 const formData = new FormData(form);
                 const response = await fetch('/', {
                     method: 'POST',
                     body: formData
                 });
-                
+
+                loadingDiv.style.display = 'none'; // Ocultar ventana de carga
+                successMessageDiv.style.display = 'block'; // Mostrar mensaje de éxito
+
                 const resultHtml = await response.text();
                 resultDiv.innerHTML = resultHtml;
             });
