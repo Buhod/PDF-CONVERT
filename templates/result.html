@@ -8,7 +8,7 @@
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: #007bff; /* Cambiar a fondo azul */
+            background-color: hsl(210, 50%, 20%); /* Cambiar a fondo azul */
             margin: 0;
             padding: 0;
         }
@@ -37,10 +37,12 @@
 
         #result h2 {
             margin-bottom: 10px;
+            color: #0C356A; /* Cambiar color de título en el resultado */
         }
 
         #result p {
             margin-bottom: 5px;
+            color: #0C356A; /* Cambiar color de texto en el resultado */
         }
 
         #result ul {
@@ -50,22 +52,48 @@
 
         #result li {
             margin-bottom: 5px;
+            color: #0C356A; /* Cambiar color de texto en la lista */
+        }
+
+        .download-button {
+            display: inline-block;
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-left: 10px;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 24px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Resultados del Convertidor de PDF</h1>
+        <h1>Resultados del Separador de PDF</h1>
         <div id="result">
             <h2>Resultados:</h2>
-            <p>Archivo convertido: <a href="{{ pdf_path }}" download>{{ pdf_filename }}</a></p>
+            <p>Archivo Separado: <a href="{{ pdf_path }}" download>{{ pdf_filename }}</a></p>
             <p>Hoja(s) separada(s):</p>
             <ul>
                 {% for file_path in separated_files %}
-                    <li><a href="{{ url_for('download', filename=os.path.basename(file_path)) }}" download>{{ os.path.basename(file_path) }}</a></li>
+                    <li>
+                        <a href="{{ url_for('download', filename=os.path.basename(file_path)) }}" download>
+                            {{ os.path.basename(file_path) }}
+                        </a>
+                        <a class="download-button" href="{{ url_for('download', filename=os.path.basename(file_path)) }}" download>
+                            Descargar
+                        </a>
+                    </li>
                 {% endfor %}
             </ul>
         </div>
     </div>
 </body>
 </html>
+
