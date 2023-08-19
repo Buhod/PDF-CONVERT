@@ -2,43 +2,24 @@
 <html>
 <head>
     <title>Convertidor de PDF</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
-    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <style>
         body {
-            font-family: 'Roboto', sans-serif;
-            background-color: hsl(210, 50%, 20%);
-            color: hsl(0, 0%, 100%);
-            margin: 0;
-            padding: 0;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            background-color: #f1f1f1;
         }
 
         h1 {
+            color: #333;
             text-align: center;
-            margin-bottom: 40px;
-            font-size: 36px;
         }
 
         form {
+            margin: 20px auto;
             text-align: center;
         }
 
-        label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
-
-        .input-group {
-            margin-bottom: 20px;
+        input[type="file"] {
+            display: none;
         }
 
         .file-input-label {
@@ -47,56 +28,29 @@
             background-color: #007bff;
             color: #fff;
             cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
         }
 
         .file-input-label:hover {
             background-color: #0056b3;
         }
 
-        #convertFormat {
-            padding: 8px;
-        }
-
-        button[type="submit"] {
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s ease-in-out;
-        }
-
-        button[type="submit"]:hover {
-            background-color: #0056b3;
-            transform: scale(1.1);
-        }
-
-        #loading {
-            display: none;
-            text-align: center;
-            margin-top: 20px;
-            color: #aaa; /* Color tenue */
-        }
-
-        #successMessage {
-            display: none;
-            text-align: center;
-            margin-top: 20px;
-            color: #0C356A; /* Cambiar a color azul */
+        .file-input-label:active {
+            background-color: #003080;
         }
 
         #result {
-            background-color: #fff;
+            margin: 20px auto;
+            max-width: 600px;
+            background-color: #007bff; /* Cambiar el fondo a azul */
+            color: #fff; /* Cambiar el color del texto a blanco */
             padding: 20px;
             border-radius: 5px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
+            text-align: center;
         }
 
         #result h2 {
+            color: #fff; /* Cambiar el color del título a blanco */
             margin-bottom: 10px;
         }
 
@@ -105,60 +59,57 @@
         }
 
         #result ul {
-            padding: 0;
             list-style-type: none;
+            padding: 0;
         }
 
         #result li {
             margin-bottom: 5px;
-            display: flex;
-            align-items: center;
         }
 
-        .download-button {
-            margin-left: auto;
+        #loading {
+            display: none;
+            margin-top: 20px;
+            color: #aaa;
         }
 
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 24px;
-            }
-
-            form {
-                width: 100%;
-            }
+        #successMessage {
+            display: none;
+            margin-top: 20px;
+            color: #0C356A;
         }
+
+        #errorMessage {
+            display: none;
+            margin-top: 20px;
+            color: #ff0000;
+        }
+
+        #progressBar {
+            display: none;
+            margin-top: 20px;
+        }
+
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Convertidor de PDF</h1>
-        <form method="POST" enctype="multipart/form-data">
-            <div class="input-group">
-                <label for="pdfFile" class="file-input-label"><i class="fas fa-file-pdf"></i> Seleccionar archivo PDF</label>
-                <input type="file" id="pdfFile" name="pdfFile" accept=".pdf" required>
-            </div>
-            <div class="input-group">
-                <label for="convertFormat">Convertir a formato:</label>
-                <select id="convertFormat" name="convertFormat">
-                    <option value="pdf">PDF</option>
-                </select>
-            </div>
-            <button type="submit">Convertir</button>
-        </form>
+    <h1>Convertidor de PDF</h1>
+    <form method="POST" enctype="multipart/form-data">
+        <label for="pdfFile" class="file-input-label">Seleccionar archivo PDF</label>
+        <input type="file" id="pdfFile" name="pdfFile" accept=".pdf" required>
+        <br>
+        <label for="convertFormat">Convertir a formato:</label>
+        <select id="convertFormat" name="convertFormat">
+            <option value="pdf">PDF</option>
+        </select>
+        <br>
+        <button type="submit">Convertir</button>
+    </form>
 
-        <div id="loading" style="display: none;">
-            <p>Cargando archivo...</p>
-        </div>
-
-        <div id="successMessage" style="display: none;">
-            <p>Archivo cargado satisfactoriamente.</p>
-        </div>
-
-        <div id="result">
-            <p id="placeholder-text" style="color: #aaa;">Aquí aparecerán los archivos separados</p>
-            <!-- Mostrar resultados aquí ... -->
-        </div>
+    <div id="result">
+        <div id="loading">Cargando archivo...<br><progress id="progressBar" value="0" max="100"></progress></div>
+        <div id="successMessage">Archivo convertido correctamente.</div>
+        <div id="errorMessage">No se puede convertir el archivo. Asegúrate de que sea un archivo PDF.</div>
     </div>
 
     <script>
@@ -166,15 +117,15 @@
             const form = document.querySelector('form');
             const resultDiv = document.getElementById('result');
             const loadingDiv = document.getElementById('loading');
+            const progressBar = document.getElementById('progressBar');
             const successMessageDiv = document.getElementById('successMessage');
-            const placeholderText = document.getElementById('placeholder-text');
+            const errorMessageDiv = document.getElementById('errorMessage');
 
             form.addEventListener('submit', async function(event) {
                 event.preventDefault();
 
                 loadingDiv.style.display = 'block'; // Mostrar ventana de carga
-                resultDiv.innerHTML = ''; // Limpiar contenido del resultado
-                placeholderText.style.display = 'none'; // Ocultar mensaje tenue
+                progressBar.style.display = 'block'; // Mostrar barra de carga
 
                 const formData = new FormData(form);
                 const response = await fetch('/', {
@@ -183,11 +134,16 @@
                 });
 
                 loadingDiv.style.display = 'none'; // Ocultar ventana de carga
-                successMessageDiv.style.display = 'block'; // Mostrar mensaje de éxito
+                progressBar.style.display = 'none'; // Ocultar barra de carga
 
                 const resultHtml = await response.text();
                 resultDiv.innerHTML = resultHtml;
-                placeholderText.style.display = 'none'; // Ocultar mensaje tenue
+
+                if (response.ok) {
+                    successMessageDiv.style.display = 'block'; // Mostrar mensaje de éxito
+                } else {
+                    errorMessageDiv.style.display = 'block'; // Mostrar mensaje de error
+                }
             });
         });
     </script>
