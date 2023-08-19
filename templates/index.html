@@ -74,11 +74,26 @@
             transform: scale(1.1);
         }
 
+        #loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+            color: #aaa; /* Color tenue */
+        }
+
+        #successMessage {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+            color: #0C356A; /* Cambiar a color azul */
+        }
+
         #result {
             background-color: #fff;
             padding: 20px;
             border-radius: 5px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
         }
 
         #result h2 {
@@ -96,6 +111,12 @@
 
         #result li {
             margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .download-button {
+            margin-left: auto;
         }
 
         @media (max-width: 600px) {
@@ -135,6 +156,7 @@
         </div>
 
         <div id="result">
+            <p id="placeholder-text" style="color: #aaa;">Aquí aparecerán los archivos separados</p>
             <!-- Mostrar resultados aquí ... -->
         </div>
     </div>
@@ -145,11 +167,14 @@
             const resultDiv = document.getElementById('result');
             const loadingDiv = document.getElementById('loading');
             const successMessageDiv = document.getElementById('successMessage');
+            const placeholderText = document.getElementById('placeholder-text');
 
             form.addEventListener('submit', async function(event) {
                 event.preventDefault();
 
                 loadingDiv.style.display = 'block'; // Mostrar ventana de carga
+                resultDiv.innerHTML = ''; // Limpiar contenido del resultado
+                placeholderText.style.display = 'none'; // Ocultar mensaje tenue
 
                 const formData = new FormData(form);
                 const response = await fetch('/', {
@@ -162,6 +187,7 @@
 
                 const resultHtml = await response.text();
                 resultDiv.innerHTML = resultHtml;
+                placeholderText.style.display = 'none'; // Ocultar mensaje tenue
             });
         });
     </script>
