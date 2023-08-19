@@ -111,12 +111,6 @@
 
         #result li {
             margin-bottom: 5px;
-            display: flex;
-            align-items: center;
-        }
-
-        .download-button {
-            margin-left: auto;
         }
 
         @media (max-width: 600px) {
@@ -156,7 +150,7 @@
         </div>
 
         <div id="result">
-            <p id="placeholder-text" style="color: #aaa;">Aquí aparecerán los archivos separados</p>
+            <p style="color: #aaa;">Aquí aparecerán los archivos separados</p>
             <!-- Mostrar resultados aquí ... -->
         </div>
     </div>
@@ -167,14 +161,13 @@
             const resultDiv = document.getElementById('result');
             const loadingDiv = document.getElementById('loading');
             const successMessageDiv = document.getElementById('successMessage');
-            const placeholderText = document.getElementById('placeholder-text');
 
             form.addEventListener('submit', async function(event) {
                 event.preventDefault();
 
                 loadingDiv.style.display = 'block'; // Mostrar ventana de carga
                 resultDiv.innerHTML = ''; // Limpiar contenido del resultado
-                placeholderText.style.display = 'none'; // Ocultar mensaje tenue
+                resultDiv.children[0].style.display = 'none'; // Ocultar mensaje tenue
 
                 const formData = new FormData(form);
                 const response = await fetch('/', {
@@ -187,7 +180,7 @@
 
                 const resultHtml = await response.text();
                 resultDiv.innerHTML = resultHtml;
-                placeholderText.style.display = 'none'; // Ocultar mensaje tenue
+                resultDiv.children[0].style.display = 'none'; // Ocultar mensaje tenue
             });
         });
     </script>
