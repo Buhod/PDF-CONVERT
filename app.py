@@ -71,4 +71,4 @@ def generate_random_string(length=8):
     return ''.join(random.choice(letters) for _ in range(length))
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=false)
+    app.run(host='0.0.0.0', debug=False)
